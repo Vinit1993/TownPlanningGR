@@ -1,0 +1,20 @@
+PODS:
+  - IQDropDownTextField (2.0)
+  - SideMenuSwift (2.0.6)
+
+DEPENDENCIES:
+  - IQDropDownTextField
+  - SideMenuSwift
+
+SPEC REPOS:
+  trunk:
+    - IQDropDownTextField
+    - SideMenuSwift
+
+SPEC CHECKSUMS:
+  IQDropDownTextField: 79293d19042b6f2ee6f02decf4a0e68e59e4f327
+  SideMenuSwift: f12ca1b11faad909bfc2878df37e0a1c40fa4570
+
+PODFILE CHECKSUM: 417b2a9ac3a73e07772e6d8477c10cc26ad6f6d8
+
+COCOAPODS: 1.10.0

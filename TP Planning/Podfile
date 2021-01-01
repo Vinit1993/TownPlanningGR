@@ -6,5 +6,7 @@ target 'TP Planning' do
   use_frameworks!
 
   # Pods for TP Planning
+  pod 'SideMenuSwift'
+  pod 'IQDropDownTextField'
 
 end

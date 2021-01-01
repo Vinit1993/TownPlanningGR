@@ -1,0 +1,6 @@
+framework module Pods_TP_Planning {
+  umbrella header "Pods-TP Planning-umbrella.h"
+
+  export *
+  module * { export * }
+}
