@@ -8,5 +8,6 @@ target 'TP Planning' do
   # Pods for TP Planning
   pod 'SideMenuSwift'
   pod 'IQDropDownTextField'
+  pod 'CoreStore'
 
 end

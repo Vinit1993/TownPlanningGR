@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreStore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -18,6 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         HomeMainDataHelper.shared.fillCategoriesData()
+        
+        CoreStoreDefaults.dataStack = DataStack(xcodeModelName: "TP_Planning", bundle: Bundle.main)
+        do {
+            let store = SQLiteStore(fileName: "TP_Planning.sqlite", localStorageOptions: .recreateStoreOnModelMismatch)
+            try CoreStoreDefaults.dataStack.addStorageAndWait(store)
+        } catch {
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -48,7 +56,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
 

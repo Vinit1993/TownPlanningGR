@@ -730,6 +730,7 @@
                     </view>
                     <connections>
                         <outlet property="docsTableView" destination="NFT-kR-Wco" id="n44-td-2nM"/>
+                        <outlet property="navBar" destination="W2N-V7-79Z" id="YYF-KS-gRA"/>
                         <outlet property="searchBar" destination="SQI-54-Vya" id="cOy-e7-MQQ"/>
                         <outlet property="totalDocLabel" destination="kE6-a3-Esv" id="I3n-fF-Owg"/>
                     </connections>

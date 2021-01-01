@@ -1,20 +1,24 @@
 PODS:
+  - CoreStore (7.3.1)
   - IQDropDownTextField (2.0)
   - SideMenuSwift (2.0.6)
 
 DEPENDENCIES:
+  - CoreStore
   - IQDropDownTextField
   - SideMenuSwift
 
 SPEC REPOS:
   trunk:
+    - CoreStore
     - IQDropDownTextField
     - SideMenuSwift
 
 SPEC CHECKSUMS:
+  CoreStore: 5645253dae207a1c9fd2e30fccd2ff056e346a38
   IQDropDownTextField: 79293d19042b6f2ee6f02decf4a0e68e59e4f327
   SideMenuSwift: f12ca1b11faad909bfc2878df37e0a1c40fa4570
 
-PODFILE CHECKSUM: 417b2a9ac3a73e07772e6d8477c10cc26ad6f6d8
+PODFILE CHECKSUM: dde4369c47352d0b1d67e7afb88b3e15b4fb078f
 
 COCOAPODS: 1.10.0

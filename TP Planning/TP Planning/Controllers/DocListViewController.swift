@@ -9,7 +9,7 @@ import UIKit
 
 class DocListViewController: UIViewController {
     
-
+    @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var docsTableView: UITableView!
     @IBOutlet weak var totalDocLabel: UILabel!
@@ -22,8 +22,8 @@ class DocListViewController: UIViewController {
     var selectedSubCategory: SubCategory?
     var selectedLeaftCategory: LeafCategory?
         
-    var docListArray: [CategoryDocument] = []
-    var searchDocumentsArray: [CategoryDocument] = []
+    var docListArray: [DocumentCategory] = []
+    var searchDocumentsArray: [DocumentCategory] = []
     
     var isConstitution = false
     let constitutionURL = "https://www.india.gov.in/sites/upload_files/npi/files/coi_part_full.pdf"
@@ -41,12 +41,14 @@ class DocListViewController: UIViewController {
         if isConstitution {
             searchBar.isHidden = true
             totalDocLabel.isHidden = true
+            navBar.topItem?.title = "Constitution of India"
             return
         } else if let cat = category {
-            docListArray = FileManagerAPI.shared.allDocsArray.filter({$0.categoryValue == cat.value })
+            navBar.topItem?.title = cat.name
+            docListArray = FileManagerAPI.shared.getAllDocuments().filter({$0.categoryValue == cat.value })
             searchDocumentsArray = docListArray
         } else if let selCat = selectedCategory {
-            docListArray = FileManagerAPI.shared.allDocsArray.filter({$0.categoryValue == selCat.value })
+            docListArray = FileManagerAPI.shared.getAllDocuments().filter({$0.categoryValue == selCat.value })
             if let subCat = selectedSubCategory {
                 docListArray = docListArray.filter({$0.subCategoryValue == subCat.value })
             }
@@ -55,7 +57,8 @@ class DocListViewController: UIViewController {
             }
             searchDocumentsArray = docListArray
         } else {
-            docListArray = FileManagerAPI.shared.allDocsArray
+            navBar.topItem?.title = "Search Documents"
+            docListArray = FileManagerAPI.shared.getAllDocuments()
             searchBar.becomeFirstResponder()
         }
         totalDoc()
@@ -111,8 +114,8 @@ extension DocListViewController: UITableViewDataSource, UITableViewDelegate, UID
             savePdf(urlString: constitutionURL, fileName: "Constitution of India")
         } else {
             let selectedDoc = searchDocumentsArray[indexPath.row]
-            let urlString = FileManagerAPI.shared.baseURL + "doc?path=\(selectedDoc.fullPath)"
-            savePdf(urlString: urlString, fileName: selectedDoc.documentName)
+            let urlString = FileManagerAPI.shared.baseURL + "doc?path=\(selectedDoc.fullPath ?? "")"
+            savePdf(urlString: urlString, fileName: selectedDoc.documentName ?? "Document")
         }
     }
     
@@ -131,6 +134,7 @@ extension DocListViewController: UITableViewDataSource, UITableViewDelegate, UID
                         try pdfData?.write(to: actualPath, options: .atomic)
                         self?.showSavedPdf(url: urlString, fileName: fileName)
                     } catch {
+                        self?.activityIndicator.stopAnimating()
                         print("Pdf could not be saved")
                     }
                 }
@@ -202,7 +206,7 @@ extension DocListViewController: UISearchBarDelegate {
     
     func searchDocs(text: String) {
         if text != "" {
-            searchDocumentsArray = docListArray.filter { $0.documentName.lowercased().contains(text.lowercased())}
+            searchDocumentsArray = docListArray.filter { ($0.documentName?.lowercased().contains(text.lowercased()) ?? false)}
         } else {
             if category != nil || selectedCategory != nil  {
                 searchDocumentsArray = docListArray

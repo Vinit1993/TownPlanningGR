@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreStore
 
 enum successResponseCode: Int {
     case success = 200
@@ -75,43 +76,42 @@ class FileManagerAPI {
     private init() {}
     static let shared = FileManagerAPI()
     
-    var allDocsArray: [CategoryDocument] = []
+//    var allDocsArray: [CategoryDocument] = []
     
     let baseURL = "https://tphelplinefunc.azurewebsites.net/api/"
     
+    func getAllDocuments() -> [DocumentCategory] {
+        do {
+            return try CoreStoreDefaults.dataStack.fetchAll(From<DocumentCategory>()).sorted(by: { (d1, d2) -> Bool in
+                d1.documentName?.localizedCaseInsensitiveCompare(d2.documentName ?? "") == ComparisonResult.orderedAscending
+            })            
+        } catch {
+            return []
+        }
+    }
+    
     func fetchAllDocs() {
                 
-        URLSessionAPI.sharedAPI.performRequest(urlString: "\(baseURL)\("doclist")", type: .get) { [weak self] statusCode, response, data, error in
+        URLSessionAPI.sharedAPI.performRequest(urlString: "\(baseURL)\("doclist")", type: .get) { statusCode, response, data, error in
             
             if statusCode == .success {
-                
                 if let resDict = response as? [String] {
                     
+                    CoreStoreDefaults.dataStack.perform(
+                        asynchronous: { (transaction) -> Void in
+                            try transaction.deleteAll(From<DocumentCategory>())
+                        },
+                        completion: { _ in }
+                    )
+                    
                     for string in resDict {
-                        
-                        let array = string.components(separatedBy: "/")
-                        
-                        var subCategoryName: String?
-                        var leafCategoryName: String?
-
-                        if array.count >= 3 {
-                            subCategoryName = array[1]
-                        }
-                        
-                        if array.count >= 4 {
-                            leafCategoryName = array[2]
-                        }
-                                                
-                        let nameWithYearArray = array.last?.components(separatedBy: "_")
-                        
-                        var yearName: String = "N/A"
-                        
-                        if nameWithYearArray?.count ?? 1 > 1 {
-                            yearName = nameWithYearArray?.last?.components(separatedBy: ".").first ?? "N/A"
-                        }
-                                                                            
-                        self?.allDocsArray.append(CategoryDocument(categoryValue: array.first ?? "Acts", subCategoryValue: subCategoryName, leafCategoryValue: leafCategoryName, documentName: nameWithYearArray?.first ?? "Document", documentYear: yearName, fullPath: string))
-                        
+                        CoreStoreDefaults.dataStack.perform(
+                            asynchronous: { (transaction) -> Void in
+                                let obj = transaction.create(Into<DocumentCategory>())
+                                obj.fillObject(string: string)
+                            },
+                            completion: { _ in }
+                        )
                     }
                 }
             } 
