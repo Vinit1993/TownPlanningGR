@@ -160,20 +160,10 @@ extension MenuViewController: UITableViewDataSource, UITableViewDelegate {
             }
             
         case .share:
-            
-            UIGraphicsBeginImageContext(view.frame.size)
-            view.layer.render(in: UIGraphicsGetCurrentContext()!)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            let textToShare = "I'm using TP Helpline app, why don't you give it a try: "
-                    
-            if let myWebsite = URL(string: "http://itunes.apple.com/app/id=com.tphelpline") {//Enter link to your app here
-                let objectsToShare = [textToShare, myWebsite, image ?? #imageLiteral(resourceName: "app-logo")] as [Any]
-                let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-                self.present(activityVC, animated: true, completion: nil)
-            }
-            
+            let textToShare = "I'm using TP Helpline app, why don't you give it a try: https://apps.apple.com/in/app/tp-helpline/id1547221404"
+            let objectsToShare = [textToShare] as [Any]
+            let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+            self.present(activityVC, animated: true, completion: nil)
         }
     }
 }
