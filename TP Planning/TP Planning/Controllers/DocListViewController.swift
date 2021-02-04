@@ -149,7 +149,7 @@ extension DocListViewController: UITableViewDataSource, UITableViewDelegate, UID
             for url in contents {
                 activityIndicator.stopAnimating()
                 if let fileName = fileName.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-                    if url.description.contains("\(fileName)") {
+                    if url.description.contains("\(fileName).pdf") {
                         // its your file! do what you want with it!
                         let dc = UIDocumentInteractionController(url: url)
                         dc.delegate = self
@@ -177,7 +177,7 @@ extension DocListViewController: UITableViewDataSource, UITableViewDelegate, UID
             let contents = try FileManager.default.contentsOfDirectory(at: docURL, includingPropertiesForKeys: [.fileResourceTypeKey], options: .skipsHiddenFiles)
             for url in contents {
                 if let fileName = fileName.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-                    if url.description.contains("\(fileName)") {
+                    if url.description.contains("\(fileName).pdf") {
                         status = true
                     }
                 }
